@@ -40,7 +40,7 @@ public class Problem {
     LOG.entering(Problem.class.getName(), "Problem");
     LOG.setLevel(Level.ALL);
     Alternative.setLambda(1);
-    //Alternative.distance = new 
+    Alternative.distance = new EuclideanMetrics();
   }
   
   boolean setLambda(double lambda)
@@ -72,11 +72,12 @@ public class Problem {
     return rp;
   }
   
-  public boolean readProblem(File file) throws FileNotFoundException, NegativeValueException, NullValueException, InputMismatchException
+  public boolean readProblem(File file) throws FileNotFoundException, NegativeValueException, NullValueException, InputMismatchException, Exception
   {
     LOG.entering(Problem.class.getName(), "readProblem");
     boolean state = true;
-    try (Scanner scanner = new Scanner(file)) {
+    Scanner scanner = new Scanner(file);
+    try {
       int number_of_criteria = scanner.nextInt();
       int number_of_alternatives = scanner.nextInt();
       
@@ -102,7 +103,7 @@ public class Problem {
       //refsets - target points
       scanner.next("tp");
       int number_of_tp = scanner.nextInt();
-      for (int i=0; i<number_of_tp; ++i)
+      for (int i=0; i<number_of_tp; ++i)  
       {
         RefPoint rp = readRefPoint(number_of_criteria, scanner);
         targetPoints.addPoint(rp);
@@ -131,6 +132,7 @@ public class Problem {
     }
     catch (Exception e)
     {
+      scanner.close();
       throw e;
     }
     return state;
