@@ -4,9 +4,15 @@
  */
 package RefSetAlgorithm;
 
+import RefPoints.NegativeValueException;
+import RefPoints.NullValueException;
+import RefPoints.RefPoint;
 import RefSet.RefSet;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 /**
  *
@@ -47,9 +53,72 @@ public class Problem {
     }
   }
   
-  public boolean readProblem(File file)
+  private RefPoint readRefPoint(int number_of_criteria, Scanner scanner) throws NegativeValueException, NullValueException, InputMismatchException
   {
-    return true;
+    RefPoint rp = new RefPoint();
+    rp.setSize(number_of_criteria);
+    for (int j = 0; j < number_of_criteria; ++j) {
+      rp.addCriterionValue(j, scanner.nextDouble());
+    }
+    return rp;
+  }
+  
+  public boolean readProblem(File file) throws FileNotFoundException, NegativeValueException, NullValueException, InputMismatchException
+  {
+    boolean state = true;
+    try (Scanner scanner = new Scanner(file)) {
+      int number_of_criteria = scanner.nextInt();
+      int number_of_alternatives = scanner.nextInt();
+      
+      //alternatives
+      for (int i=0; i < number_of_alternatives; ++i)
+      {
+        RefPoint rp;
+        rp = readRefPoint(number_of_criteria, scanner);
+        alternatives.add(new Alternative(rp));
+      }
+      
+      //refsets bounds of optimally
+      scanner.next("boo");
+      int number_of_boo = scanner.nextInt();
+      for (int i=0; i<number_of_boo; ++i)
+      {
+        RefPoint rp = readRefPoint(number_of_criteria, scanner);
+        boundsOfOptimally.addPoint(rp);
+      }
+      
+      //refsets - target points
+      scanner.next("tp");
+      int number_of_tp = scanner.nextInt();
+      for (int i=0; i<number_of_tp; ++i)
+      {
+        RefPoint rp = readRefPoint(number_of_criteria, scanner);
+        targetPoints.addPoint(rp);
+      }
+      
+      //refsets - satus qou
+      scanner.next("sq");
+      int number_of_sq = scanner.nextInt();
+      for (int i=0; i<number_of_sq; ++i)
+      {
+        RefPoint rp = readRefPoint(number_of_criteria, scanner);
+        statusQuo.addPoint(rp);
+      }
+      
+      //refsets - anti ideal
+      scanner.next("boo");
+      int number_of_ai = scanner.nextInt();
+      for (int i=0; i<number_of_ai; ++i)
+      {
+        RefPoint rp = readRefPoint(number_of_criteria, scanner);
+        antiIdeal.addPoint(rp);
+      }
+    }
+    catch (Exception e)
+    {
+      throw e;
+    }
+    return state;
   }
   
   /**

@@ -12,13 +12,19 @@ import RefSet.RefSet;
  * @author Tomko
  */
 public class Alternative {
-  RefPoint point;
+  private RefPoint point;
   double distanceToA1;
   double distanceToA3;
   
   static DistanceFunction distance;
   private static double lambda;
   double G;
+
+  public Alternative(RefPoint point) {
+    this.point = point;
+  }
+  
+  
   
   void calculateDistances(RefSet A1, RefSet A3)
   {
