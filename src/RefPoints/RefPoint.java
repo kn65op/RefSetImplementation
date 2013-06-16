@@ -5,17 +5,15 @@
 
 package RefPoints;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  *
  * @author Asia
  */
 public class RefPoint {
-    private Vector<Double> values = new Vector<Double>();
-    RefPoint() {
+    private ArrayList<Double> values = new ArrayList<>();
+    public RefPoint() {
 
     }
 
@@ -24,7 +22,11 @@ public class RefPoint {
             throw new NegativeValueException();
         }
         else {
-            values.setSize(size);
+          int i = 0;
+          while (i < size)
+          {
+            values.add(0.0);
+          }
         }
     }
 
@@ -40,30 +42,27 @@ public class RefPoint {
                 throw new NullValueException();
             }
             else {
-                values.setElementAt(value, criterion);
+                values.set(criterion, value);
             }
     }
 
     public Double getCriterionValue(int criterion) {
-        return values.elementAt(criterion);
+        return values.get(criterion);
     }
 
-    public void addCriteria(Vector<Double> t) throws NegativeValueException, NullValueException {
+    public void addCriteria(ArrayList<Double> t) throws NegativeValueException, NullValueException {
         setSize(t.size());
-        Double tmp = new Double(0);
         for (int i = 0; i < t.size(); i++) {
-            tmp = t.elementAt(i);
+            Double tmp = new Double(t.get(i));
             addCriterionValue(i, tmp);
         }
     }
 
-    public Vector<Double> getCriteria() {
-        Vector<Double> v = new Vector<Double>();
-        v.setSize(values.size());
-        Double t = new Double(0);
+    public ArrayList<Double> getCriteria() {
+        ArrayList<Double> v = new ArrayList<Double>();
         for (int i = 0; i < values.size(); i++) {
-            t = getCriterionValue(i);
-            v.setElementAt(t, i);
+            Double t = new Double(getCriterionValue(i));
+            v.add(t);
         }
         return v;
     }

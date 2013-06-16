@@ -226,3 +226,6 @@ nb-configuration.xml
 
 #docs
 doc/*.pdf
+
+#tmp 
+tmp
