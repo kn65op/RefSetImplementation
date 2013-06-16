@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Asia
  */
 public class RefPoint {
-    private ArrayList<Double> values = new ArrayList<>();
+    private ArrayList<Double> values = new ArrayList<Double>();
     public RefPoint() {
 
     }
@@ -23,7 +23,7 @@ public class RefPoint {
         }
         else {
           int i = 0;
-          while (i < size)
+          while (i++ < size)
           {
             values.add(0.0);
           }
