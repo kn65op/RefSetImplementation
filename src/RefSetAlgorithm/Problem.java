@@ -13,6 +13,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,6 +27,8 @@ public class Problem {
     Czebyszew
   }
   
+  private static final Logger LOG = Logger.getLogger("Algorithm log");
+  
   private ArrayList<Alternative> alternatives = new ArrayList<Alternative>();
   private RefSet boundsOfOptimally = new RefSet();
   private RefSet targetPoints = new RefSet();
@@ -33,17 +37,21 @@ public class Problem {
 
   
   public Problem() {
+    LOG.entering(Problem.class.getName(), "Problem");
+    LOG.setLevel(Level.ALL);
     Alternative.setLambda(1);
     //Alternative.distance = new 
   }
   
   boolean setLambda(double lambda)
   {
+    LOG.entering(Problem.class.getName(), "setLambda");    
     return Alternative.setLambda(lambda);
   }
   
   void setMetric(Metric metric)
   {
+    LOG.entering(Problem.class.getName(), "SetMetric");
     switch (metric)
     {
       case Euclidean: 
@@ -55,6 +63,7 @@ public class Problem {
   
   private RefPoint readRefPoint(int number_of_criteria, Scanner scanner) throws NegativeValueException, NullValueException, InputMismatchException
   {
+    LOG.entering(Problem.class.getName(), "readRefPoint");
     RefPoint rp = new RefPoint();
     rp.setSize(number_of_criteria);
     for (int j = 0; j < number_of_criteria; ++j) {
@@ -65,6 +74,7 @@ public class Problem {
   
   public boolean readProblem(File file) throws FileNotFoundException, NegativeValueException, NullValueException, InputMismatchException
   {
+    LOG.entering(Problem.class.getName(), "readProblem");
     boolean state = true;
     try (Scanner scanner = new Scanner(file)) {
       int number_of_criteria = scanner.nextInt();
@@ -77,6 +87,7 @@ public class Problem {
         rp = readRefPoint(number_of_criteria, scanner);
         alternatives.add(new Alternative(rp));
       }
+      LOG.info("Alternatives read");
       
       //refsets bounds of optimally
       scanner.next("boo");
@@ -86,6 +97,7 @@ public class Problem {
         RefPoint rp = readRefPoint(number_of_criteria, scanner);
         boundsOfOptimally.addPoint(rp);
       }
+      LOG.info("Bounds of optimally read");
       
       //refsets - target points
       scanner.next("tp");
@@ -95,6 +107,7 @@ public class Problem {
         RefPoint rp = readRefPoint(number_of_criteria, scanner);
         targetPoints.addPoint(rp);
       }
+      LOG.info("Target points read");
       
       //refsets - satus qou
       scanner.next("sq");
@@ -104,6 +117,7 @@ public class Problem {
         RefPoint rp = readRefPoint(number_of_criteria, scanner);
         statusQuo.addPoint(rp);
       }
+      LOG.info("Staus quo read");
       
       //refsets - anti ideal
       scanner.next("boo");
@@ -113,6 +127,7 @@ public class Problem {
         RefPoint rp = readRefPoint(number_of_criteria, scanner);
         antiIdeal.addPoint(rp);
       }
+      LOG.info("Anti ideal read");
     }
     catch (Exception e)
     {
@@ -127,6 +142,7 @@ public class Problem {
    */
   public Alternative solve()
   {
+    LOG.entering(Problem.class.getName(), "Solve");
     double min_dist = Double.MAX_VALUE;
     Alternative alt = null;
     //solving: calculate distance to A1 and to A3 and find min to A1 and max to A3 min for g(-j) - g(+j)
@@ -134,9 +150,11 @@ public class Problem {
     {
         //calculate distances
         a.calculateDistances(targetPoints, antiIdeal);
+        LOG.info("Distances calculated");
         
         //find max (in G(x) = g(-j) - lambda g(+j) - lambda is argitrary (has to be more then 0)
         a.calculateG();
+        LOG.info("G calculated");
         
         //find min in G and get alternative
         if (a.G < min_dist)
@@ -144,6 +162,7 @@ public class Problem {
           min_dist = a.G;
           alt = a;
         }
+        LOG.info("Found min");
     }
     
     return alt;
