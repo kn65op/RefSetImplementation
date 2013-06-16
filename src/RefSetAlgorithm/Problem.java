@@ -120,7 +120,7 @@ public class Problem {
       LOG.info("Staus quo read");
       
       //refsets - anti ideal
-      scanner.next("boo");
+      scanner.next("ai");
       int number_of_ai = scanner.nextInt();
       for (int i=0; i<number_of_ai; ++i)
       {
