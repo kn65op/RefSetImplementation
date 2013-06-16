@@ -1,3 +1,4 @@
+git status
 #################
 ## Eclipse
 #################
@@ -222,3 +223,6 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+
+#docs
+doc/*.pdf
