@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  * @author Tomko
  */
 public class Alternative {
-  private final static Logger LOG = Logger.getLogger("Alternatives")
+  private final static Logger LOG = Logger.getLogger("Alternatives");
   
   private RefPoint point;
   double distanceToA1;
