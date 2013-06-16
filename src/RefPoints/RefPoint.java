@@ -23,7 +23,7 @@ public class RefPoint {
         }
         else {
           int i = 0;
-          while (i < size)
+          while (i++ < size)
           {
             values.add(0.0);
           }
