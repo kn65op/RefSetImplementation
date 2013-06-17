@@ -12,7 +12,6 @@ import RefSetAlgorithm.Problem;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
 import de.erichseifert.gral.ui.InteractivePanel;
-import java.awt.Button;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -75,7 +74,7 @@ public class MainWindow extends javax.swing.JFrame {
     jLabel8 = new javax.swing.JLabel();
     jLabel9 = new javax.swing.JLabel();
     LambdaField = new javax.swing.JTextField();
-    DistanceComboBox = new javax.swing.JComboBox();
+    DistanceComboBox = new javax.swing.JComboBox(Problem.Metric.values());
     jLabel10 = new javax.swing.JLabel();
     jButton2 = new javax.swing.JButton();
     BOOXField = new javax.swing.JTextField();
@@ -154,6 +153,11 @@ public class MainWindow extends javax.swing.JFrame {
     jLabel9.setText("Distance function");
 
     DistanceComboBox.setEnabled(false);
+    DistanceComboBox.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        DistanceComboBoxActionPerformed(evt);
+      }
+    });
 
     jLabel10.setText("Add a point");
 
@@ -522,6 +526,10 @@ public class MainWindow extends javax.swing.JFrame {
       problem.getAI().removePoint(index);
     }
   }//GEN-LAST:event_jButton7ActionPerformed
+
+  private void DistanceComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DistanceComboBoxActionPerformed
+    problem.setMetric((Problem.Metric)DistanceComboBox.getSelectedItem());
+  }//GEN-LAST:event_DistanceComboBoxActionPerformed
 
   /**
    * @param args the command line arguments

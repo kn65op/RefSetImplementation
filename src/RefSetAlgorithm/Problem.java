@@ -99,14 +99,16 @@ public class Problem implements ListModel<Alternative> {
     return Alternative.setLambda(lambda);
   }
   
-  void setMetric(Metric metric)
+  public void setMetric(Metric metric)
   {
-    LOG.entering(Problem.class.getName(), "SetMetric");
+    LOG.entering(Problem.class.getName(), "SetMetric", metric);
     switch (metric)
     {
       case Euclidean: 
+        Alternative.distance = new EuclideanMetrics();
         break;
       case Czebyszew:
+        Alternative.distance = new CzebyszewMetrics();
         break;
     }
   }
