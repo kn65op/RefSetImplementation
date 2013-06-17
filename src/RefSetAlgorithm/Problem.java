@@ -12,9 +12,12 @@ import RefSet.RefSet;
 import RefSetAlgorithm.Alternative.State;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -191,7 +194,14 @@ public class Problem implements ListModel<Alternative> {
   public ListModel getCriteria() {
     return criteries;
   }
-  
+
+  private void printRefSet(RefSet set, PrintWriter writer) {
+    for (RefPoint rp : set.getPoints())
+    {
+      printRefPoint(rp, writer);
+    }
+  }
+
   public enum Metric
   {
     Euclidean,
@@ -251,6 +261,7 @@ public class Problem implements ListModel<Alternative> {
     LOG.entering(Problem.class.getName(), "readProblem");
     boolean state = true;
     Scanner scanner = new Scanner(file);
+    scanner.useLocale(Locale.UK);
     try {
       int number_of_criteria = scanner.nextInt();
       for (int i=0; i < number_of_criteria; ++i)
@@ -379,6 +390,50 @@ public class Problem implements ListModel<Alternative> {
       {
         a.state = Alternative.State.DOMINATING;
       }
+    }
+  }
+  
+  private void printRefPoint(RefPoint point, PrintWriter writer) {
+    for (Double d : point.getCriteria()) {
+      writer.print(d);
+      writer.print(" ");
+    }
+    writer.println();
+  }
+  
+  
+  public void store(File file)
+  {
+    PrintWriter writer = null;
+    try {
+      writer = new PrintWriter(file);
+      writer.println(size);
+      for (String s : criteries.list)
+      {
+        writer.println(s);
+      }
+      writer.println(alternatives.size());
+      for (Alternative a : alternatives)
+      {
+        printRefPoint(a.getPoint(), writer);
+      
+      }
+      writer.println("boo");
+      writer.println(boundsOfOptimally.getSize());
+      printRefSet(boundsOfOptimally, writer);
+      writer.println("tp");
+      writer.println(targetPoints.getSize());
+      printRefSet(targetPoints, writer);
+      writer.println("sq");
+      writer.println(statusQuo.getSize());
+      printRefSet(statusQuo, writer);
+      writer.println("ai");
+      writer.println(antiIdeal.getSize());
+      printRefSet(antiIdeal, writer);
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(Problem.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      writer.close();
     }
   }
 }
