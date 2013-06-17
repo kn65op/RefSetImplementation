@@ -702,6 +702,7 @@ public class MainWindow extends javax.swing.JFrame {
     AntiIdealiPoints.setModel(problem.getAI());
     criteriaNumberTextField.setText(Integer.toString(problem.criteriaSize()));
     LambdaField.setText(Double.toString(problem.getLambda()));
+    CriteriaList.setModel(problem.getCriteria());
   }
 
   private RefPoint getPointFromInput(JTextField xfield, JTextField yfield) {

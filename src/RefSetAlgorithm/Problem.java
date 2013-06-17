@@ -13,8 +13,8 @@ import RefSetAlgorithm.Alternative.State;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.InputMismatchException;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +29,8 @@ public class Problem implements ListModel<Alternative> {
   private int size;
   private Object consistency_message;
   private Alternative best = null;
+  private LinkedList<ListDataListener> listners = new LinkedList<ListDataListener>();
+  private Criteries criteries = new Criteries();
 
   public Iterable<Alternative> getAlternatives() {
     return alternatives;
@@ -52,12 +54,21 @@ public class Problem implements ListModel<Alternative> {
     return alternatives.get(index);
   }
   
-  @Override
+   @Override
   public void addListDataListener(ListDataListener l) {
+    
+    listners.add(l);
   }
 
   @Override
   public void removeListDataListener(ListDataListener l) {
+    listners.remove(l);
+  }
+
+  private void notifyListeners() {
+    for (ListDataListener l : listners) {
+      l.contentsChanged(null);
+    }
   }
 
   public RefSet getBOO() {
@@ -167,6 +178,19 @@ public class Problem implements ListModel<Alternative> {
   public Alternative getBest() {
     return best;
   }
+
+  private void clear() {
+    alternatives.clear();
+    boundsOfOptimally.clear();
+    targetPoints.clear();
+    statusQuo.clear();
+    antiIdeal.clear();
+    criteries.clear();
+  }
+
+  public ListModel getCriteria() {
+    return criteries;
+  }
   
   public enum Metric
   {
@@ -223,11 +247,16 @@ public class Problem implements ListModel<Alternative> {
   
   public boolean readProblem(File file) throws FileNotFoundException, NegativeValueException, NullValueException, InputMismatchException, Exception
   {
+    clear();
     LOG.entering(Problem.class.getName(), "readProblem");
     boolean state = true;
     Scanner scanner = new Scanner(file);
     try {
       int number_of_criteria = scanner.nextInt();
+      for (int i=0; i < number_of_criteria; ++i)
+      {
+        criteries.add(scanner.next());
+      }
       size = number_of_criteria;
       int number_of_alternatives = scanner.nextInt();
       
@@ -286,6 +315,7 @@ public class Problem implements ListModel<Alternative> {
       throw e;
     }
     calculateParetoPoints();
+    notifyListeners();
     return state;
   }
   

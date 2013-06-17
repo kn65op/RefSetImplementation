@@ -147,4 +147,8 @@ public class RefSet implements ListModel<RefPoint> {
       l.contentsChanged(null);
     }
   }
+
+  public void clear() {
+    refPoints.clear();
+  }
 }

@@ -1,4 +1,6 @@
 2
+distance
+time
 11
 3 1
 2 3 
