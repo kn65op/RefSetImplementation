@@ -112,6 +112,7 @@ public class MainWindow extends javax.swing.JFrame {
     criteriaNumberTextField.setEnabled(false);
 
     jButton1.setText("Solve");
+    jButton1.setEnabled(false);
     jButton1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton1ActionPerformed(evt);
@@ -130,25 +131,34 @@ public class MainWindow extends javax.swing.JFrame {
 
     jLabel7.setText("Anti-ideal points");
 
+    CriteriaList.setEnabled(false);
     jScrollPane1.setViewportView(CriteriaList);
 
+    AlternativeList.setEnabled(false);
     jScrollPane2.setViewportView(AlternativeList);
 
+    BoundsOfOptimalityList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     jScrollPane3.setViewportView(BoundsOfOptimalityList);
 
+    TargetPointsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     jScrollPane4.setViewportView(TargetPointsList);
 
+    StatusQuoList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     jScrollPane5.setViewportView(StatusQuoList);
 
+    AntiIdealiPoints.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
     jScrollPane6.setViewportView(AntiIdealiPoints);
 
     jLabel8.setText("Lambda");
 
     jLabel9.setText("Distance function");
 
+    DistanceComboBox.setEnabled(false);
+
     jLabel10.setText("Add a point");
 
     jButton2.setText("Delete selected point");
+    jButton2.setEnabled(false);
     jButton2.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton2ActionPerformed(evt);
@@ -156,6 +166,7 @@ public class MainWindow extends javax.swing.JFrame {
     });
 
     jButton3.setText("Add point");
+    jButton3.setEnabled(false);
     jButton3.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton3ActionPerformed(evt);
@@ -173,8 +184,10 @@ public class MainWindow extends javax.swing.JFrame {
     });
 
     jButton4.setText("Delete selected point");
+    jButton4.setEnabled(false);
 
     jButton5.setText("Add point");
+    jButton5.setEnabled(false);
     jButton5.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton5ActionPerformed(evt);
@@ -182,12 +195,15 @@ public class MainWindow extends javax.swing.JFrame {
     });
 
     jButton6.setText("Delete selected point");
+    jButton6.setEnabled(false);
 
     jButton7.setText("Delete selected point");
+    jButton7.setEnabled(false);
 
     jLabel13.setText("Add a point");
 
     jButton8.setText("Add point");
+    jButton8.setEnabled(false);
     jButton8.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton8ActionPerformed(evt);
@@ -195,6 +211,7 @@ public class MainWindow extends javax.swing.JFrame {
     });
 
     jButton9.setText("Add point");
+    jButton9.setEnabled(false);
     jButton9.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jButton9ActionPerformed(evt);
@@ -410,17 +427,9 @@ public class MainWindow extends javax.swing.JFrame {
           try {
             problem.readProblem(file);
             fillFields();
+            setEnabled();
             if (problem.criteriaSize() == 2) {
-              DataTable data = new DataTable(Double.class, Double.class);
-              for (Alternative a : problem.getAlternatives()) {
-                RefPoint rp = a.getPoint();
-                data.add(rp.getCriterionValue(0), rp.getCriterionValue(1));
-              }
-              plot = new XYPlot(data);
-              jPanel1.add(new Button("12312312312"));
-              jPanel1.validate();
-              jPanel2.add(new InteractivePanel(plot));
-              jPanel2.repaint();
+              plotData();
             }
           } catch (FileNotFoundException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
@@ -438,7 +447,7 @@ public class MainWindow extends javax.swing.JFrame {
   }//GEN-LAST:event_jMenuItem1ActionPerformed
 
   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    // TODO add your handling code here:
+    
   }//GEN-LAST:event_jButton2ActionPerformed
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -595,6 +604,30 @@ public class MainWindow extends javax.swing.JFrame {
       JOptionPane.showMessageDialog(rootPane, "Internal error", "Parse error", JOptionPane.ERROR_MESSAGE);
     }
     return point;
+  }
+
+  private void plotData() {
+    DataTable data = new DataTable(Double.class, Double.class);
+    for (Alternative a : problem.getAlternatives()) {
+      RefPoint rp = a.getPoint();
+      data.add(rp.getCriterionValue(0), rp.getCriterionValue(1));
+    }
+    plot = new XYPlot(data);
+    jPanel2.add(new InteractivePanel(plot));
+    jPanel2.repaint();
+  }
+
+  private void setEnabled() {
+    jButton1.setEnabled(true);
+    jButton2.setEnabled(true);
+    jButton3.setEnabled(true);
+    jButton4.setEnabled(true);
+    jButton5.setEnabled(true);
+    jButton6.setEnabled(true);
+    jButton7.setEnabled(true);
+    jButton8.setEnabled(true);
+    jButton9.setEnabled(true);
+    DistanceComboBox.setEnabled(true);
   }
 
 }
