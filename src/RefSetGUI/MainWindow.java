@@ -21,7 +21,7 @@ import javax.swing.JFileChooser;
  */
 public class MainWindow extends javax.swing.JFrame {
 
-    final private JFileChooser fc1 = new JFileChooser();
+    final private JFileChooser fc1 = new JFileChooser(System.getProperty("user.dir"));
     Problem problem = new Problem();
   /**
    * Creates new form MainWindow
