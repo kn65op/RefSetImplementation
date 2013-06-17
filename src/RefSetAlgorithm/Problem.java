@@ -21,6 +21,16 @@ import java.util.logging.Logger;
  * @author Tomko
  */
 public class Problem {
+  private int size;
+
+  public Iterable<Alternative> getAlternatives() {
+    return alternatives;
+  }
+
+  public int criteriaSize() {
+    return size;
+  }
+  
   public enum Metric
   {
     Euclidean,
@@ -79,6 +89,7 @@ public class Problem {
     Scanner scanner = new Scanner(file);
     try {
       int number_of_criteria = scanner.nextInt();
+      size = number_of_criteria;
       int number_of_alternatives = scanner.nextInt();
       
       //alternatives
