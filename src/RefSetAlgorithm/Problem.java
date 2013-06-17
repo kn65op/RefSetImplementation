@@ -15,12 +15,14 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ListModel;
+import javax.swing.event.ListDataListener;
 
 /**
  *
  * @author Tomko
  */
-public class Problem {
+public class Problem implements ListModel<Alternative> {
   private int size;
 
   public Iterable<Alternative> getAlternatives() {
@@ -29,6 +31,28 @@ public class Problem {
 
   public int criteriaSize() {
     return size;
+  }
+
+  public double getLambda() {
+    return Alternative.getLambda();
+  }
+
+  @Override
+  public int getSize() {
+    return alternatives.size();
+  }
+
+  @Override
+  public Alternative getElementAt(int index) {
+    return alternatives.get(index);
+  }
+  
+  @Override
+  public void addListDataListener(ListDataListener l) {
+  }
+
+  @Override
+  public void removeListDataListener(ListDataListener l) {
   }
   
   public enum Metric

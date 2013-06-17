@@ -16,6 +16,10 @@ import java.util.logging.Logger;
  */
 public class Alternative {
   private final static Logger LOG = Logger.getLogger("Alternatives");
+
+  static double getLambda() {
+    return lambda;
+  }
   
   private RefPoint point;
   double distanceToA1;
@@ -84,6 +88,19 @@ public class Alternative {
 
   public RefPoint getPoint() {
     return point;
+  }
+
+  @Override
+  public String toString() {
+    String ret;
+    ret = "(";
+    for (Double d : point.getCriteria())
+    {
+      ret += Double.toString(d) + ", ";
+    }
+    ret = ret.substring(0, ret.length() - 2);
+    ret += ")";
+    return ret;
   }
 
 

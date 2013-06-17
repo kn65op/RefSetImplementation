@@ -6,12 +6,14 @@ package RefSet;
 
 import RefPoints.RefPoint;
 import java.util.ArrayList;
+import javax.swing.ListModel;
+import javax.swing.event.ListDataListener;
 
 /**
  *
  * @author Tomko
  */
-public class RefSet {
+public class RefSet implements ListModel<RefPoint> {
   
   private ArrayList<RefPoint> refPoints = new ArrayList<RefPoint>();
   
@@ -100,5 +102,25 @@ public class RefSet {
       }
     }
     return false;
+  }
+
+  @Override
+  public int getSize() {
+    return refPoints.size();
+  }
+
+  @Override
+  public RefPoint getElementAt(int index) {
+    return refPoints.get(index);
+  }
+
+  @Override
+  public void addListDataListener(ListDataListener l) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public void removeListDataListener(ListDataListener l) {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 }
