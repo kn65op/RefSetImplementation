@@ -116,11 +116,9 @@ public class RefSet implements ListModel<RefPoint> {
 
   @Override
   public void addListDataListener(ListDataListener l) {
-    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   @Override
   public void removeListDataListener(ListDataListener l) {
-    throw new UnsupportedOperationException("Not supported yet.");
   }
 }

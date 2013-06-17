@@ -207,9 +207,9 @@ public class MainWindow extends javax.swing.JFrame {
           .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
           .addComponent(jScrollPane6)
           .addComponent(criteriaNumberTextField, javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(LambdaField, javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(DistanceComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+          .addComponent(DistanceComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(jPanel1Layout.createSequentialGroup()
@@ -530,6 +530,10 @@ public class MainWindow extends javax.swing.JFrame {
 
   private void fillFields() {
     AlternativeList.setModel(problem);
+    BoundsOfOptimalityList.setModel((problem.getBOO()));
+    TargetPointsList.setModel(problem.getTP());
+    StatusQuoList.setModel(problem.getSQ());
+    AntiIdealiPoints.setModel(problem.getAI());
     
     LambdaField.setText(Double.toString(problem.getLambda()));
   }

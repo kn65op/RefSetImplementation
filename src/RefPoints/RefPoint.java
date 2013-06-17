@@ -165,4 +165,11 @@ public class RefPoint {
         throw new AssertionError(previous.name());
       }
     }
+
+  @Override
+  public String toString() {
+    return values.toString().replace('[', '(').replace(']', ')');
+  }
+    
+    
 }

@@ -54,6 +54,22 @@ public class Problem implements ListModel<Alternative> {
   @Override
   public void removeListDataListener(ListDataListener l) {
   }
+
+  public ListModel getBOO() {
+    return boundsOfOptimally;
+  }
+
+  public ListModel getAI() {
+    return antiIdeal;
+  }
+
+  public ListModel getSQ() {
+    return statusQuo;
+  }
+
+  public ListModel getTP() {
+    return targetPoints;
+  }
   
   public enum Metric
   {

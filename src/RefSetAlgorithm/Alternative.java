@@ -92,15 +92,7 @@ public class Alternative {
 
   @Override
   public String toString() {
-    String ret;
-    ret = "(";
-    for (Double d : point.getCriteria())
-    {
-      ret += Double.toString(d) + ", ";
-    }
-    ret = ret.substring(0, ret.length() - 2);
-    ret += ")";
-    return ret;
+    return point.getCriteria().toString().replace('[', '(').replace(']', ')');
   }
 
 
