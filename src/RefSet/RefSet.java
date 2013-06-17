@@ -19,13 +19,23 @@ public class RefSet implements ListModel<RefPoint> {
   private ArrayList<RefPoint> refPoints = new ArrayList<RefPoint>();
   private LinkedList<ListDataListener> listners = new LinkedList<ListDataListener>();
   
+  public void removePoint(int index)
+  {
+    try
+    {
+      refPoints.remove(index);
+    }
+    catch (IndexOutOfBoundsException e)
+    {
+      return;
+    }
+    notifyListeners();
+  }
+  
   public void addPoint(RefPoint point)
   {
     refPoints.add(point);
-    for (ListDataListener l : listners)
-    {
-      l.contentsChanged(null);
-    }
+    notifyListeners();
   }
   
   public ArrayList<RefPoint> getPoints()
@@ -129,5 +139,12 @@ public class RefSet implements ListModel<RefPoint> {
   @Override
   public void removeListDataListener(ListDataListener l) {
     listners.remove(l);
+  }
+
+  private void notifyListeners() {
+    for (ListDataListener l : listners)
+    {
+      l.contentsChanged(null);
+    }
   }
 }

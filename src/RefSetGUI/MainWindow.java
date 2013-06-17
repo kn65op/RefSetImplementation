@@ -185,6 +185,11 @@ public class MainWindow extends javax.swing.JFrame {
 
     jButton4.setText("Delete selected point");
     jButton4.setEnabled(false);
+    jButton4.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton4ActionPerformed(evt);
+      }
+    });
 
     jButton5.setText("Add point");
     jButton5.setEnabled(false);
@@ -196,9 +201,19 @@ public class MainWindow extends javax.swing.JFrame {
 
     jButton6.setText("Delete selected point");
     jButton6.setEnabled(false);
+    jButton6.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton6ActionPerformed(evt);
+      }
+    });
 
     jButton7.setText("Delete selected point");
     jButton7.setEnabled(false);
+    jButton7.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton7ActionPerformed(evt);
+      }
+    });
 
     jLabel13.setText("Add a point");
 
@@ -447,7 +462,11 @@ public class MainWindow extends javax.swing.JFrame {
   }//GEN-LAST:event_jMenuItem1ActionPerformed
 
   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    
+    int index = BoundsOfOptimalityList.getSelectedIndex();
+    if (index != -1)
+    {
+      problem.getBOO().removePoint(index);
+    }
   }//GEN-LAST:event_jButton2ActionPerformed
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -479,6 +498,30 @@ public class MainWindow extends javax.swing.JFrame {
     RefPoint point = getPointFromInput(AIXPoint, AIYField);
     problem.getAI().addPoint(point);    // TODO add your handling code here:
   }//GEN-LAST:event_jButton8ActionPerformed
+
+  private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    int index = TargetPointsList.getSelectedIndex();
+    if (index != -1)
+    {
+      problem.getTP().removePoint(index);
+    }
+  }//GEN-LAST:event_jButton4ActionPerformed
+
+  private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    int index = StatusQuoList.getSelectedIndex();
+    if (index != -1)
+    {
+      problem.getSQ().removePoint(index);
+    }
+  }//GEN-LAST:event_jButton6ActionPerformed
+
+  private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    int index = AntiIdealiPoints.getSelectedIndex();
+    if (index != -1)
+    {
+      problem.getAI().removePoint(index);
+    }
+  }//GEN-LAST:event_jButton7ActionPerformed
 
   /**
    * @param args the command line arguments
