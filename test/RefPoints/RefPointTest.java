@@ -153,4 +153,47 @@ public class RefPointTest {
     result = instance.compare(other);
     assertEquals(expResult, result);
   }
+
+  /**
+   * Test of getValuesSize method, of class RefPoint.
+   */
+  @Test
+  public void testGetValuesSize() {
+    System.out.println("getValuesSize");
+    RefPoint instance = new RefPoint();
+    int expResult = 0;
+    int result = instance.getValuesSize();
+    assertEquals(expResult, result);
+    // TODO review the generated test code and remove the default call to fail.
+    fail("The test case is a prototype.");
+  }
+
+  /**
+   * Test of getCriterionValue method, of class RefPoint.
+   */
+  @Test
+  public void testGetCriterionValue() {
+    System.out.println("getCriterionValue");
+    int criterion = 0;
+    RefPoint instance = new RefPoint();
+    Double expResult = null;
+    Double result = instance.getCriterionValue(criterion);
+    assertEquals(expResult, result);
+    // TODO review the generated test code and remove the default call to fail.
+    fail("The test case is a prototype.");
+  }
+
+  /**
+   * Test of getCriteria method, of class RefPoint.
+   */
+  @Test
+  public void testGetCriteria() {
+    System.out.println("getCriteria");
+    RefPoint instance = new RefPoint();
+    ArrayList expResult = null;
+    ArrayList result = instance.getCriteria();
+    assertEquals(expResult, result);
+    // TODO review the generated test code and remove the default call to fail.
+    fail("The test case is a prototype.");
+  }
 }
