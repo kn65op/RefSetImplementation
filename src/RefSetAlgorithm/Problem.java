@@ -235,18 +235,18 @@ public class Problem implements ListModel<Alternative> {
       {
         continue; //not need to check 
       }
-      for (int j = i; j < s; ++j)
+      for (int j = i + 1; j < s; ++j)
       {
         Alternative b = alternatives.get(j);
         ComparasionResult compare = a.getPoint().compare(b.getPoint());
         if (compare == RefPoint.ComparasionResult.GREATER || compare == RefPoint.ComparasionResult.GREATER_EQUAL)
         {
-          b.state = Alternative.State.DOMINATED;
+          a.state = Alternative.State.DOMINATED;
+          break;
         }
         else if (compare == RefPoint.ComparasionResult.LESS || compare == RefPoint.ComparasionResult.LESS_EQUAL)
         {
-          a.state = Alternative.State.DOMINATED;
-          break;
+          b.state = Alternative.State.DOMINATED;
         }
       }
       if (a.state == Alternative.State.NOT_TESTED)

@@ -15,6 +15,10 @@ import java.util.logging.Logger;
  */
 public class Alternative {
   private final static Logger LOG = Logger.getLogger("Alternatives");
+
+  public boolean isParetoOptimal() {
+    return state == State.DOMINATING;
+  }
   
   enum State
   {
