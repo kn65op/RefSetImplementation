@@ -6,12 +6,23 @@
 package RefPoints;
 
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 /**
  *
  * @author Asia
  */
 public class RefPoint {
+  
+    public enum ComparasionResult {
+      GREATER,
+      GREATER_EQUAL,
+      EUQAL,
+      LESS,
+      LESS_EQUAL,
+      UNCOMPARABLE
+    }
+  
     private ArrayList<Double> values = new ArrayList<Double>();
     public RefPoint() {
 
@@ -51,6 +62,7 @@ public class RefPoint {
     }
 
     public void addCriteria(ArrayList<Double> t) throws NegativeValueException, NullValueException {
+        values.clear();
         setSize(t.size());
         for (int i = 0; i < t.size(); i++) {
             Double tmp = new Double(t.get(i));
@@ -65,5 +77,92 @@ public class RefPoint {
             v.add(t);
         }
         return v;
+    }
+    
+    public ComparasionResult compare(RefPoint other)
+    {
+      ListIterator it = values.listIterator();
+      ListIterator other_it = other.values.listIterator();
+      return compareRec(it, other_it);
+    }
+    
+    private ComparasionResult compareRec(ListIterator<Double> it, ListIterator<Double> otherit)
+    {
+      //boundary condition 
+      if (!it.hasNext())
+      {
+        return null;
+      }
+      it.next();
+      if (!it.hasNext())
+      {
+        it.previous();
+        double this_value = it.next();
+        double other_value = otherit.next();
+        if (this_value > other_value)
+        {
+          return ComparasionResult.GREATER;
+        }
+        else if (this_value < other_value)
+        {
+          return ComparasionResult.LESS;
+        }
+        return ComparasionResult.EUQAL;
+      }
+      it.previous();
+      
+      //normal conditions
+      double this_value = it.next();
+      double other_value = otherit.next();
+      ComparasionResult previous = compareRec(it, otherit);
+      switch (previous)
+      {
+      case GREATER:
+        if (this_value > other_value)
+        {
+          return ComparasionResult.GREATER;
+        }
+        else if (this_value < other_value)
+        {
+          return ComparasionResult.UNCOMPARABLE;
+        }
+        return ComparasionResult.GREATER_EQUAL;
+      case GREATER_EQUAL:
+        if (this_value >= other_value)
+        {
+          return ComparasionResult.GREATER_EQUAL;
+        }
+        return ComparasionResult.UNCOMPARABLE;
+      case EUQAL:
+        if (this_value > other_value)
+        {
+          return ComparasionResult.GREATER_EQUAL;
+        }
+        else if (this_value < other_value)
+        {
+          return ComparasionResult.LESS_EQUAL;
+        }
+        return ComparasionResult.EUQAL;
+      case LESS:
+        if (this_value > other_value)
+        {
+          return ComparasionResult.UNCOMPARABLE;
+        }
+        else if (this_value < other_value)
+        {
+          return ComparasionResult.LESS;
+        }
+        return ComparasionResult.LESS_EQUAL;
+      case LESS_EQUAL:
+        if (this_value <= other_value)
+        {
+          return ComparasionResult.GREATER_EQUAL;
+        }
+        return ComparasionResult.UNCOMPARABLE;
+      case UNCOMPARABLE:
+        return ComparasionResult.UNCOMPARABLE;
+      default:
+        throw new AssertionError(previous.name());
+      }
     }
 }
