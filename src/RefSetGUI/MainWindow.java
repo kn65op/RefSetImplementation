@@ -11,7 +11,10 @@ import RefSetAlgorithm.Alternative;
 import RefSetAlgorithm.Problem;
 import de.erichseifert.gral.data.DataTable;
 import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
+import de.erichseifert.gral.plots.points.PointRenderer;
 import de.erichseifert.gral.ui.InteractivePanel;
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -485,6 +488,7 @@ public class MainWindow extends javax.swing.JFrame {
     {
       problem.getBOO().removePoint(index);
     }
+    updateAll();
   }//GEN-LAST:event_jButton2ActionPerformed
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -505,21 +509,25 @@ public class MainWindow extends javax.swing.JFrame {
   private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
     RefPoint point = getPointFromInput(TPXField, TPYField);
     problem.getTP().addPoint(point);    // TODO add your handling code here:
+    updateAll();
   }//GEN-LAST:event_jButton5ActionPerformed
 
   private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
     RefPoint point = getPointFromInput(BOOXField, BOOYField);
     problem.getBOO().addPoint(point);
+    updateAll();
   }//GEN-LAST:event_jButton3ActionPerformed
 
   private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
     RefPoint point = getPointFromInput(SQXField, SQYField);
     problem.getSQ().addPoint(point);    // TODO add your handling code here:
+    updateAll();
   }//GEN-LAST:event_jButton9ActionPerformed
 
   private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
     RefPoint point = getPointFromInput(AIXPoint, AIYField);
     problem.getAI().addPoint(point);    // TODO add your handling code here:
+    updateAll();
   }//GEN-LAST:event_jButton8ActionPerformed
 
   private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -528,6 +536,7 @@ public class MainWindow extends javax.swing.JFrame {
     {
       problem.getTP().removePoint(index);
     }
+    updateAll();
   }//GEN-LAST:event_jButton4ActionPerformed
 
   private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -536,6 +545,7 @@ public class MainWindow extends javax.swing.JFrame {
     {
       problem.getSQ().removePoint(index);
     }
+    updateAll();
   }//GEN-LAST:event_jButton6ActionPerformed
 
   private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -544,6 +554,7 @@ public class MainWindow extends javax.swing.JFrame {
     {
       problem.getAI().removePoint(index);
     }
+    updateAll();
   }//GEN-LAST:event_jButton7ActionPerformed
 
   private void DistanceComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DistanceComboBoxActionPerformed
@@ -689,12 +700,32 @@ public class MainWindow extends javax.swing.JFrame {
   }
 
   private void plotData() {
-    DataTable data = new DataTable(Double.class, Double.class);
-    for (Alternative a : problem.getAlternatives()) {
-      RefPoint rp = a.getPoint();
-      data.add(rp.getCriterionValue(0), rp.getCriterionValue(1));
-    }
-    plot = new XYPlot(data);
+    DataTable pareto_optimal = getDataTableFromArrayList(problem.getParetoOptimalAlternatives());
+    DataTable rest = getDataTableFromArrayList(problem.getRest());
+    DataTable bounds = getDataTableFromArrayListRefPoints(problem.getBOO().getPoints());
+    DataTable target = getDataTableFromArrayListRefPoints(problem.getTP().getPoints());
+    DataTable quo = getDataTableFromArrayListRefPoints(problem.getSQ().getPoints());
+    DataTable anti = getDataTableFromArrayListRefPoints(problem.getAI().getPoints());
+
+    plot = new XYPlot(pareto_optimal, rest, bounds, target, quo, anti);
+    DefaultPointRenderer2D point_renderer = new DefaultPointRenderer2D();
+    point_renderer.setSetting(PointRenderer.COLOR, Color.GREEN);
+    plot.setPointRenderer(pareto_optimal, point_renderer);
+    point_renderer = new DefaultPointRenderer2D();
+    point_renderer.setSetting(PointRenderer.COLOR, Color.BLACK);
+    plot.setPointRenderer(rest, point_renderer);
+    point_renderer = new DefaultPointRenderer2D();
+    point_renderer.setSetting(PointRenderer.COLOR, Color.ORANGE);
+    plot.setPointRenderer(bounds, point_renderer);
+    point_renderer = new DefaultPointRenderer2D();
+    point_renderer.setSetting(PointRenderer.COLOR, Color.BLUE);
+    plot.setPointRenderer(target, point_renderer);
+    point_renderer = new DefaultPointRenderer2D();
+    point_renderer.setSetting(PointRenderer.COLOR, Color.YELLOW);
+    plot.setPointRenderer(quo, point_renderer);
+    point_renderer = new DefaultPointRenderer2D();
+    point_renderer.setSetting(PointRenderer.COLOR, Color.RED);
+    plot.setPointRenderer(anti, point_renderer);
     jPanel2.add(new InteractivePanel(plot));
     jPanel2.repaint();
   }
@@ -712,5 +743,27 @@ public class MainWindow extends javax.swing.JFrame {
     jButton10.setEnabled(true);
     DistanceComboBox.setEnabled(true);
   }
+
+  private DataTable getDataTableFromArrayList(Iterable<Alternative> array) {
+    DataTable ret = new DataTable(Double.class, Double.class);
+    for (Alternative a : array) {
+      RefPoint rp = a.getPoint();
+      ret.add(rp.getCriterionValue(0), rp.getCriterionValue(1));
+    }
+    return ret;
+  }
+  
+  private DataTable getDataTableFromArrayListRefPoints(Iterable<RefPoint> array) {
+    DataTable ret = new DataTable(Double.class, Double.class);
+    for (RefPoint rp : array) {
+      ret.add(rp.getCriterionValue(0), rp.getCriterionValue(1));
+    }
+    return ret;
+  }
+
+  private void updateAll() {
+    jPanel2.removeAll();
+    plotData();
+   }
 
 }

@@ -9,9 +9,11 @@ import RefPoints.NullValueException;
 import RefPoints.RefPoint;
 import RefPoints.RefPoint.ComparasionResult;
 import RefSet.RefSet;
+import RefSetAlgorithm.Alternative.State;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -138,6 +140,27 @@ public class Problem implements ListModel<Alternative> {
       consistency_message = "Everything is good";
     }
     return consistent;
+  }
+
+  public Iterable<Alternative> getParetoOptimalAlternatives() {
+    return findAlternatives(Alternative.State.DOMINATING);
+    
+  }
+
+  private Iterable<Alternative> findAlternatives(State state) {
+    ArrayList<Alternative> ret = new ArrayList<Alternative>();
+    for (Alternative a : alternatives)
+    {
+      if (a.state == state)
+      {
+        ret.add(a);
+      }
+    }
+    return ret;
+  }
+
+  public Iterable<Alternative> getRest() {
+    return findAlternatives(State.DOMINATED);
   }
   
   public enum Metric
