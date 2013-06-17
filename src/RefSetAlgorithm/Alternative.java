@@ -6,7 +6,6 @@ package RefSetAlgorithm;
 
 import RefPoints.RefPoint;
 import RefSet.RefSet;
-import com.sun.xml.internal.fastinfoset.tools.StAX2SAXReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +15,16 @@ import java.util.logging.Logger;
  */
 public class Alternative {
   private final static Logger LOG = Logger.getLogger("Alternatives");
+  
+  enum State
+  {
+    DOMINATING,
+    DOMINATED,
+    NOT_TESTED
+  }
 
+  State state = State.NOT_TESTED;
+  
   static double getLambda() {
     return lambda;
   }

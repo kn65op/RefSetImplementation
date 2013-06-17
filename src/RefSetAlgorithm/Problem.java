@@ -7,6 +7,7 @@ package RefSetAlgorithm;
 import RefPoints.NegativeValueException;
 import RefPoints.NullValueException;
 import RefPoints.RefPoint;
+import RefPoints.RefPoint.ComparasionResult;
 import RefSet.RefSet;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -188,6 +189,7 @@ public class Problem implements ListModel<Alternative> {
       scanner.close();
       throw e;
     }
+    calculateParetoPoints();
     return state;
   }
   
@@ -221,5 +223,36 @@ public class Problem implements ListModel<Alternative> {
     }
     
     return alt;
+  }
+  
+  void calculateParetoPoints()
+  {
+    int s = alternatives.size();
+    for (int i = 0; i < s; ++i)
+    {
+      Alternative a = alternatives.get(i);
+      if (a.state == Alternative.State.DOMINATED)
+      {
+        continue; //not need to check 
+      }
+      for (int j = i; j < s; ++j)
+      {
+        Alternative b = alternatives.get(j);
+        ComparasionResult compare = a.getPoint().compare(b.getPoint());
+        if (compare == RefPoint.ComparasionResult.GREATER || compare == RefPoint.ComparasionResult.GREATER_EQUAL)
+        {
+          b.state = Alternative.State.DOMINATED;
+        }
+        else if (compare == RefPoint.ComparasionResult.LESS || compare == RefPoint.ComparasionResult.LESS_EQUAL)
+        {
+          a.state = Alternative.State.DOMINATED;
+          break;
+        }
+      }
+      if (a.state == Alternative.State.NOT_TESTED)
+      {
+        a.state = Alternative.State.DOMINATING;
+      }
+    }
   }
 }
