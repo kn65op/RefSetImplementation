@@ -82,6 +82,10 @@ public class Alternative {
     System.out.println(G);
   }
 
+  public RefPoint getPoint() {
+    return point;
+  }
+
 
 
 }
