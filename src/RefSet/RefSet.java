@@ -6,6 +6,7 @@ package RefSet;
 
 import RefPoints.RefPoint;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
@@ -16,10 +17,15 @@ import javax.swing.event.ListDataListener;
 public class RefSet implements ListModel<RefPoint> {
   
   private ArrayList<RefPoint> refPoints = new ArrayList<RefPoint>();
+  private LinkedList<ListDataListener> listners = new LinkedList<ListDataListener>();
   
   public void addPoint(RefPoint point)
   {
     refPoints.add(point);
+    for (ListDataListener l : listners)
+    {
+      l.contentsChanged(null);
+    }
   }
   
   public ArrayList<RefPoint> getPoints()
@@ -116,9 +122,12 @@ public class RefSet implements ListModel<RefPoint> {
 
   @Override
   public void addListDataListener(ListDataListener l) {
+    
+    listners.add(l);
   }
 
   @Override
   public void removeListDataListener(ListDataListener l) {
+    listners.remove(l);
   }
 }

@@ -15,10 +15,13 @@ import de.erichseifert.gral.ui.InteractivePanel;
 import java.awt.Button;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -153,6 +156,11 @@ public class MainWindow extends javax.swing.JFrame {
     });
 
     jButton3.setText("Add point");
+    jButton3.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton3ActionPerformed(evt);
+      }
+    });
 
     jLabel11.setText("Add a point");
 
@@ -180,8 +188,18 @@ public class MainWindow extends javax.swing.JFrame {
     jLabel13.setText("Add a point");
 
     jButton8.setText("Add point");
+    jButton8.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton8ActionPerformed(evt);
+      }
+    });
 
     jButton9.setText("Add point");
+    jButton9.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton9ActionPerformed(evt);
+      }
+    });
 
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
@@ -285,8 +303,8 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
               .addComponent(jButton3)
               .addComponent(BOOXField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addComponent(jLabel10)
-              .addComponent(BOOYField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+              .addComponent(BOOYField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addComponent(jLabel10))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
             .addComponent(jButton2))
           .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -434,8 +452,24 @@ public class MainWindow extends javax.swing.JFrame {
   }//GEN-LAST:event_TPYFieldActionPerformed
 
   private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-    // TODO add your handling code here:
+    RefPoint point = getPointFromInput(TPXField, TPYField);
+    problem.getTP().addPoint(point);    // TODO add your handling code here:
   }//GEN-LAST:event_jButton5ActionPerformed
+
+  private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    RefPoint point = getPointFromInput(BOOXField, BOOYField);
+    problem.getBOO().addPoint(point);
+  }//GEN-LAST:event_jButton3ActionPerformed
+
+  private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+    RefPoint point = getPointFromInput(SQXField, SQYField);
+    problem.getSQ().addPoint(point);    // TODO add your handling code here:
+  }//GEN-LAST:event_jButton9ActionPerformed
+
+  private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    RefPoint point = getPointFromInput(AIXPoint, AIYField);
+    problem.getAI().addPoint(point);    // TODO add your handling code here:
+  }//GEN-LAST:event_jButton8ActionPerformed
 
   /**
    * @param args the command line arguments
@@ -534,8 +568,33 @@ public class MainWindow extends javax.swing.JFrame {
     TargetPointsList.setModel(problem.getTP());
     StatusQuoList.setModel(problem.getSQ());
     AntiIdealiPoints.setModel(problem.getAI());
-    
+    criteriaNumberTextField.setText(Integer.toString(problem.criteriaSize()));
     LambdaField.setText(Double.toString(problem.getLambda()));
+  }
+
+  private RefPoint getPointFromInput(JTextField xfield, JTextField yfield) {
+    Double X = null, Y = null;
+    try
+    {
+      X = Double.parseDouble(xfield.getText());
+      Y = Double.parseDouble(yfield.getText());
+    }
+    catch (NumberFormatException e)
+    {
+      JOptionPane.showMessageDialog(rootPane, "Please input real values", "Parse error", JOptionPane.ERROR_MESSAGE);
+    }
+    RefPoint point = new RefPoint();
+    ArrayList<Double> list = new ArrayList<Double>();
+    list.add(X);
+    list.add(Y);
+    try {
+      point.addCriteria(list);
+    } catch (NegativeValueException ex) {
+      JOptionPane.showMessageDialog(rootPane, "Values has to be positive", "Parse error", JOptionPane.ERROR_MESSAGE);
+    } catch (NullValueException ex) {
+      JOptionPane.showMessageDialog(rootPane, "Internal error", "Parse error", JOptionPane.ERROR_MESSAGE);
+    }
+    return point;
   }
 
 }

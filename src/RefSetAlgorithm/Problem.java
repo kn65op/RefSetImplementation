@@ -55,19 +55,19 @@ public class Problem implements ListModel<Alternative> {
   public void removeListDataListener(ListDataListener l) {
   }
 
-  public ListModel getBOO() {
+  public RefSet getBOO() {
     return boundsOfOptimally;
   }
 
-  public ListModel getAI() {
+  public RefSet getAI() {
     return antiIdeal;
   }
 
-  public ListModel getSQ() {
+  public RefSet getSQ() {
     return statusQuo;
   }
 
-  public ListModel getTP() {
+  public RefSet getTP() {
     return targetPoints;
   }
   
