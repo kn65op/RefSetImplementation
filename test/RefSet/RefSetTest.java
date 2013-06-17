@@ -162,4 +162,142 @@ public class RefSetTest {
     result = instance.checkInternalConsistency();
     assertEquals(expResult, result);
   }
+  
+  /**
+   * Test of checkMutualConsistency method, of class RefSet.
+   */
+  @Test
+  public void testCheckMutualConsistency() throws NullValueException, NegativeValueException {
+    System.out.println("checkMutualConsistency");
+    RefSet instance;
+    RefSet other;
+    RefPoint rp;
+    boolean expResult;
+    boolean result;
+    ArrayList<Double> list;
+    list = new ArrayList<Double>();
+    list.add(1.1);
+    list.add(1.1);
+    
+    instance = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 1.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    instance.addPoint(rp);
+    rp = new RefPoint();
+    list.set(0, 2.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    instance.addPoint(rp);
+    rp = new RefPoint();
+    list.set(0, 2.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    instance.addPoint(rp);
+    
+    other = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 2.0);
+    list.set(1, 2.0);
+    rp.addCriteria(list);
+    other.addPoint(rp);
+    other = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 2.0);
+    list.set(1, 3.0);
+    rp.addCriteria(list);
+    other.addPoint(rp);
+    other = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 3.0);
+    list.set(1, 2.0);
+    rp.addCriteria(list);
+    other.addPoint(rp);
+    
+    expResult = true;
+    result = instance.checkMutualConsistency(other);
+    assertEquals(expResult, result);
+    
+    instance = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 1.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    instance.addPoint(rp);
+    rp = new RefPoint();
+    list.set(0, 2.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    instance.addPoint(rp);
+    rp = new RefPoint();
+    list.set(0, 2.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    instance.addPoint(rp);
+    
+    other = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 1.0);
+    list.set(1, 3.0);
+    rp.addCriteria(list);
+    other.addPoint(rp);
+    other = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 1.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    other.addPoint(rp);
+    other = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 3.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    other.addPoint(rp);
+    
+    expResult = true;
+    result = instance.checkMutualConsistency(other);
+    assertEquals(expResult, result);
+    
+    instance = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 1.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    instance.addPoint(rp);
+    rp = new RefPoint();
+    list.set(0, 2.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    instance.addPoint(rp);
+    rp = new RefPoint();
+    list.set(0, 2.0);
+    list.set(1, 1.0);
+    rp.addCriteria(list);
+    instance.addPoint(rp);
+    
+    other = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 1.0);
+    list.set(1, 2.0);
+    rp.addCriteria(list);
+    other.addPoint(rp);
+    other = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 0.0);
+    list.set(1, 5.0);
+    rp.addCriteria(list);
+    other.addPoint(rp);
+    other = new RefSet();
+    rp = new RefPoint();
+    list.set(0, 3.0);
+    list.set(1, 0.0);
+    rp.addCriteria(list);
+    other.addPoint(rp);
+    
+    expResult = false;
+    result = instance.checkMutualConsistency(other);
+    assertEquals(expResult, result);
+  }
+
 }
