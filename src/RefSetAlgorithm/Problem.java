@@ -25,6 +25,7 @@ import javax.swing.event.ListDataListener;
  */
 public class Problem implements ListModel<Alternative> {
   private int size;
+  private Object consistency_message;
 
   public Iterable<Alternative> getAlternatives() {
     return alternatives;
@@ -70,6 +71,73 @@ public class Problem implements ListModel<Alternative> {
 
   public RefSet getTP() {
     return targetPoints;
+  }
+
+  public Object getConsistencyProblem() {
+    return consistency_message;
+  }
+
+  public boolean isConsistent() {
+    boolean consistent = true;
+    consistency_message = "";
+    
+    if (!boundsOfOptimally.checkInternalConsistency())
+    {
+      consistency_message += "Bounds of Optimality points are not internal consistent\n";
+      consistent = false;
+    }
+    if (!targetPoints.checkInternalConsistency())
+    {
+      consistency_message += "Target points are not internal consistent\n";
+      consistent = false;
+    }
+    if (!statusQuo.checkInternalConsistency())
+    {
+      consistency_message += "Status Quo points are not internal consistent\n";
+      consistent = false;
+    }
+    if (!antiIdeal.checkInternalConsistency())
+    {
+      consistency_message += "Anti-ideal points are not internal consistent\n";
+      consistent = false;
+    }
+    
+    if (!boundsOfOptimally.checkMutualConsistency(targetPoints))
+    {
+      consistency_message += "Bounds of optimality and target points are not mutual consistent";
+      consistent = false;
+    }
+    if (!boundsOfOptimally.checkMutualConsistency(statusQuo))
+    {
+      consistency_message += "Bounds of optimality and status quo points are not mutual consistent";
+      consistent = false;
+    }
+    if (!boundsOfOptimally.checkMutualConsistency(antiIdeal))
+    {
+      consistency_message += "Bounds of optimality and anti ideal are not mutual consistent";
+      consistent = false;
+    }
+    if (!targetPoints.checkMutualConsistency(statusQuo))
+    {
+      consistency_message += "Target points and status quo are not mutual consistent";
+      consistent = false;
+    }
+    if (!targetPoints.checkMutualConsistency(antiIdeal))
+    {
+      consistency_message += "Target points and anti ideal are not mutual consistent";
+      consistent = false;
+    }
+    if (!statusQuo.checkMutualConsistency(antiIdeal))
+    {
+      consistency_message += "Status quo points and anti ideal are not mutual consistent";
+      consistent = false;
+    }
+        
+    if (consistent)
+    {
+      consistency_message = "Everything is good";
+    }
+    return consistent;
   }
   
   public enum Metric

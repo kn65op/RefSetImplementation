@@ -95,6 +95,7 @@ public class MainWindow extends javax.swing.JFrame {
     AIYField = new javax.swing.JTextField();
     jButton8 = new javax.swing.JButton();
     jButton9 = new javax.swing.JButton();
+    jButton10 = new javax.swing.JButton();
     jPanel2 = new javax.swing.JPanel();
     jMenuBar1 = new javax.swing.JMenuBar();
     jMenu1 = new javax.swing.JMenu();
@@ -238,6 +239,14 @@ public class MainWindow extends javax.swing.JFrame {
       }
     });
 
+    jButton10.setText("Check consistency");
+    jButton10.setEnabled(false);
+    jButton10.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton10ActionPerformed(evt);
+      }
+    });
+
     javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
@@ -272,6 +281,8 @@ public class MainWindow extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE))
           .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
             .addGap(0, 0, Short.MAX_VALUE)
+            .addComponent(jButton10)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jButton1))
           .addGroup(jPanel1Layout.createSequentialGroup()
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -396,7 +407,8 @@ public class MainWindow extends javax.swing.JFrame {
         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
           .addComponent(DistanceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
           .addComponent(jLabel9)
-          .addComponent(jButton1))
+          .addComponent(jButton1)
+          .addComponent(jButton10))
         .addGap(0, 10, Short.MAX_VALUE))
     );
 
@@ -477,6 +489,11 @@ public class MainWindow extends javax.swing.JFrame {
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     //int cn = Integer.parseInt(criteriaNumberTextField.getText());
+    if (!problem.isConsistent())
+    {
+      JOptionPane.showMessageDialog(rootPane, problem.getConsistencyProblem(), "Consistency error", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
     Alternative a = problem.solve();
     a.showConsole();
   }//GEN-LAST:event_jButton1ActionPerformed
@@ -533,6 +550,17 @@ public class MainWindow extends javax.swing.JFrame {
     problem.setMetric((Problem.Metric)DistanceComboBox.getSelectedItem());
   }//GEN-LAST:event_DistanceComboBoxActionPerformed
 
+  private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+    if (!problem.isConsistent())
+    {
+      JOptionPane.showMessageDialog(rootPane, problem.getConsistencyProblem(), "Consistency error", JOptionPane.ERROR_MESSAGE);
+    }
+    else
+    {
+      JOptionPane.showMessageDialog(rootPane, problem.getConsistencyProblem(), "Consistency", JOptionPane.INFORMATION_MESSAGE);
+    }
+  }//GEN-LAST:event_jButton10ActionPerformed
+
   /**
    * @param args the command line arguments
    */
@@ -588,6 +616,7 @@ public class MainWindow extends javax.swing.JFrame {
   private javax.swing.JList TargetPointsList;
   private javax.swing.JTextField criteriaNumberTextField;
   private javax.swing.JButton jButton1;
+  private javax.swing.JButton jButton10;
   private javax.swing.JButton jButton2;
   private javax.swing.JButton jButton3;
   private javax.swing.JButton jButton4;
@@ -680,6 +709,7 @@ public class MainWindow extends javax.swing.JFrame {
     jButton7.setEnabled(true);
     jButton8.setEnabled(true);
     jButton9.setEnabled(true);
+    jButton10.setEnabled(true);
     DistanceComboBox.setEnabled(true);
   }
 
