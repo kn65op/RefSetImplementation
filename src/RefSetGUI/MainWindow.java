@@ -733,17 +733,17 @@ public class MainWindow extends javax.swing.JFrame {
   }
 
   private void plotData() {
-    DataTable pareto_optimal = getDataTableFromArrayList(problem.getParetoOptimalAlternatives());
-    DataTable rest = getDataTableFromArrayList(problem.getRest());
-    DataTable bounds = getDataTableFromArrayListRefPoints(problem.getBOO().getPoints());
-    DataTable target = getDataTableFromArrayListRefPoints(problem.getTP().getPoints());
-    DataTable quo = getDataTableFromArrayListRefPoints(problem.getSQ().getPoints());
-    DataTable anti = getDataTableFromArrayListRefPoints(problem.getAI().getPoints());
+    DataTable pareto_optimal = getDataTableFromArrayList(problem.getParetoOptimalAlternatives(), "Pareto optimal points");
+    DataTable rest = getDataTableFromArrayList(problem.getRest(), "Alternatives");
+    DataTable bounds = getDataTableFromArrayListRefPoints(problem.getBOO().getPoints(), "Bounds of optimality");
+    DataTable target = getDataTableFromArrayListRefPoints(problem.getTP().getPoints(), "Target points");
+    DataTable quo = getDataTableFromArrayListRefPoints(problem.getSQ().getPoints(), "Status quo points");
+    DataTable anti = getDataTableFromArrayListRefPoints(problem.getAI().getPoints(), "Ainti-ideal points");
     Alternative best_alt = problem.getBest();
     DataTable best = null;
     if (best_alt != null)
     {
-      best = getDataTableFromArrayListRefPoints(best_alt.getPoint());
+      best = getDataTableFromArrayListRefPoints(best_alt.getPoint(), "Solution");
     }
 
     if  (best != null)
@@ -778,6 +778,8 @@ public class MainWindow extends javax.swing.JFrame {
       point_renderer.setSetting(PointRenderer.COLOR, Color.GREEN);
       plot.setPointRenderer(best, point_renderer);
     }
+    plot.setSetting(XYPlot.LEGEND, true);
+    
     jPanel2.add(new InteractivePanel(plot));
     jPanel2.repaint();
   }
@@ -796,8 +798,16 @@ public class MainWindow extends javax.swing.JFrame {
     DistanceComboBox.setEnabled(true);
   }
 
-  private DataTable getDataTableFromArrayList(Iterable<Alternative> array) {
-    DataTable ret = new DataTable(Double.class, Double.class);
+  private DataTable getDataTableFromArrayList(Iterable<Alternative> array, final String name) {
+    DataTable ret = new DataTable(Double.class, Double.class)
+    {
+
+      @Override
+      public String toString() {
+        return name;
+      }
+      
+    };
     for (Alternative a : array) {
       RefPoint rp = a.getPoint();
       ret.add(rp.getCriterionValue(0), rp.getCriterionValue(1));
@@ -805,16 +815,32 @@ public class MainWindow extends javax.swing.JFrame {
     return ret;
   }
   
-  private DataTable getDataTableFromArrayListRefPoints(Iterable<RefPoint> array) {
-    DataTable ret = new DataTable(Double.class, Double.class);
+  private DataTable getDataTableFromArrayListRefPoints(Iterable<RefPoint> array, final String name) {
+    DataTable ret = new DataTable(Double.class, Double.class)
+    {
+
+      @Override
+      public String toString() {
+        return name;
+      }
+      
+    };
     for (RefPoint rp : array) {
       ret.add(rp.getCriterionValue(0), rp.getCriterionValue(1));
     }
     return ret;
   }
   
-  private DataTable getDataTableFromArrayListRefPoints(RefPoint rp) {
-    DataTable ret = new DataTable(Double.class, Double.class);
+  private DataTable getDataTableFromArrayListRefPoints(RefPoint rp, final String name) {
+    DataTable ret = new DataTable(Double.class, Double.class)
+    {
+
+      @Override
+      public String toString() {
+        return name;
+      }
+      
+    };
     ret.add(rp.getCriterionValue(0), rp.getCriterionValue(1));
     return ret;
   }
