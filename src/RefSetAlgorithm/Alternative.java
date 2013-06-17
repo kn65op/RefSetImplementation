@@ -6,6 +6,7 @@ package RefSetAlgorithm;
 
 import RefPoints.RefPoint;
 import RefSet.RefSet;
+import com.sun.xml.internal.fastinfoset.tools.StAX2SAXReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,5 +70,18 @@ public class Alternative {
     }
     return false;
   }
+
+  public void showConsole() {
+    System.out.println("Alternative:");
+    for (double d : point.getCriteria())
+    {
+      System.out.println(d);
+    }
+    System.out.println(distanceToA1);
+    System.out.println(distanceToA3);
+    System.out.println(G);
+  }
+
+
 
 }

@@ -4,7 +4,15 @@
  */
 package RefSetGUI;
 
+import RefPoints.NegativeValueException;
+import RefPoints.NullValueException;
+import RefSetAlgorithm.Alternative;
+import RefSetAlgorithm.Problem;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.InputMismatchException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 /**
@@ -14,6 +22,7 @@ import javax.swing.JFileChooser;
 public class MainWindow extends javax.swing.JFrame {
 
     final private JFileChooser fc1 = new JFileChooser();
+    Problem problem = new Problem();
   /**
    * Creates new form MainWindow
    */
@@ -177,7 +186,9 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      int cn = Integer.parseInt(criteriaNumberTextField.getText());
+      //int cn = Integer.parseInt(criteriaNumberTextField.getText());
+      Alternative a = problem.solve();
+      a.showConsole();
 
   }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -187,6 +198,19 @@ public class MainWindow extends javax.swing.JFrame {
 
           if (returnValue == JFileChooser.APPROVE_OPTION) {
               File file = fc1.getSelectedFile();
+          try {
+            problem.readProblem(file);
+          } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (NegativeValueException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (NullValueException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (InputMismatchException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (Exception ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+          }
           }
       }
   }//GEN-LAST:event_jMenuItem1ActionPerformed
