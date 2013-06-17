@@ -459,6 +459,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="LambdaField">
+              <Events>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="LambdaFieldFocusLost"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JComboBox" name="DistanceComboBox">
               <Properties>

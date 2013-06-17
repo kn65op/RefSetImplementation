@@ -28,6 +28,7 @@ import javax.swing.event.ListDataListener;
 public class Problem implements ListModel<Alternative> {
   private int size;
   private Object consistency_message;
+  private Alternative best = null;
 
   public Iterable<Alternative> getAlternatives() {
     return alternatives;
@@ -151,7 +152,7 @@ public class Problem implements ListModel<Alternative> {
     ArrayList<Alternative> ret = new ArrayList<Alternative>();
     for (Alternative a : alternatives)
     {
-      if (a.state == state)
+      if (a.state == state && a != best)
       {
         ret.add(a);
       }
@@ -161,6 +162,10 @@ public class Problem implements ListModel<Alternative> {
 
   public Iterable<Alternative> getRest() {
     return findAlternatives(State.DOMINATED);
+  }
+
+  public Alternative getBest() {
+    return best;
   }
   
   public enum Metric
@@ -185,7 +190,7 @@ public class Problem implements ListModel<Alternative> {
     Alternative.distance = new EuclideanMetrics();
   }
   
-  boolean setLambda(double lambda)
+  public boolean setLambda(double lambda)
   {
     LOG.entering(Problem.class.getName(), "setLambda");    
     return Alternative.setLambda(lambda);
@@ -292,7 +297,7 @@ public class Problem implements ListModel<Alternative> {
   {
     LOG.entering(Problem.class.getName(), "Solve");
     double min_dist = Double.MAX_VALUE;
-    Alternative alt = null;
+    best = null;
     //solving: calculate distance to A1 and to A3 and find min to A1 and max to A3 min for g(-j) - g(+j)
     for (Alternative a : alternatives)
     {
@@ -308,12 +313,12 @@ public class Problem implements ListModel<Alternative> {
         if (a.G < min_dist)
         {
           min_dist = a.G;
-          alt = a;
+          best = a;
         }
         LOG.info("Found min");
     }
     
-    return alt;
+    return best;
   }
   
   void calculateParetoPoints()

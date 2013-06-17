@@ -157,6 +157,12 @@ public class MainWindow extends javax.swing.JFrame {
 
     jLabel9.setText("Distance function");
 
+    LambdaField.addFocusListener(new java.awt.event.FocusAdapter() {
+      public void focusLost(java.awt.event.FocusEvent evt) {
+        LambdaFieldFocusLost(evt);
+      }
+    });
+
     DistanceComboBox.setEnabled(false);
     DistanceComboBox.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -499,6 +505,7 @@ public class MainWindow extends javax.swing.JFrame {
       return;
     }
     Alternative a = problem.solve();
+    updateAll();
     a.showConsole();
   }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -508,24 +515,28 @@ public class MainWindow extends javax.swing.JFrame {
 
   private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
     RefPoint point = getPointFromInput(TPXField, TPYField);
+    if (point == null) return;
     problem.getTP().addPoint(point);    // TODO add your handling code here:
     updateAll();
   }//GEN-LAST:event_jButton5ActionPerformed
 
   private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
     RefPoint point = getPointFromInput(BOOXField, BOOYField);
+    if (point == null) return;
     problem.getBOO().addPoint(point);
     updateAll();
   }//GEN-LAST:event_jButton3ActionPerformed
 
   private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
     RefPoint point = getPointFromInput(SQXField, SQYField);
+    if (point == null) return;
     problem.getSQ().addPoint(point);    // TODO add your handling code here:
     updateAll();
   }//GEN-LAST:event_jButton9ActionPerformed
 
   private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
     RefPoint point = getPointFromInput(AIXPoint, AIYField);
+    if (point == null) return;
     problem.getAI().addPoint(point);    // TODO add your handling code here:
     updateAll();
   }//GEN-LAST:event_jButton8ActionPerformed
@@ -571,6 +582,25 @@ public class MainWindow extends javax.swing.JFrame {
       JOptionPane.showMessageDialog(rootPane, problem.getConsistencyProblem(), "Consistency", JOptionPane.INFORMATION_MESSAGE);
     }
   }//GEN-LAST:event_jButton10ActionPerformed
+
+  private void LambdaFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_LambdaFieldFocusLost
+    try
+    {
+      if (!problem.setLambda(Double.parseDouble(LambdaField.getText())))
+      {
+        JOptionPane.showMessageDialog(rootPane, "Write real, positive value.", "Parse error", JOptionPane.ERROR_MESSAGE);
+      }
+      else
+      {
+        return;
+      }
+    }
+    catch (NumberFormatException e)
+    {
+      JOptionPane.showMessageDialog(rootPane, "Write real, positive value.", "Parse error", JOptionPane.ERROR_MESSAGE);
+    }
+    LambdaField.requestFocus();
+  }//GEN-LAST:event_LambdaFieldFocusLost
 
   /**
    * @param args the command line arguments
@@ -684,6 +714,7 @@ public class MainWindow extends javax.swing.JFrame {
     catch (NumberFormatException e)
     {
       JOptionPane.showMessageDialog(rootPane, "Please input real values", "Parse error", JOptionPane.ERROR_MESSAGE);
+      return null;
     }
     RefPoint point = new RefPoint();
     ArrayList<Double> list = new ArrayList<Double>();
@@ -693,8 +724,10 @@ public class MainWindow extends javax.swing.JFrame {
       point.addCriteria(list);
     } catch (NegativeValueException ex) {
       JOptionPane.showMessageDialog(rootPane, "Values has to be positive", "Parse error", JOptionPane.ERROR_MESSAGE);
+      return null;
     } catch (NullValueException ex) {
       JOptionPane.showMessageDialog(rootPane, "Internal error", "Parse error", JOptionPane.ERROR_MESSAGE);
+      return null;
     }
     return point;
   }
@@ -706,10 +739,23 @@ public class MainWindow extends javax.swing.JFrame {
     DataTable target = getDataTableFromArrayListRefPoints(problem.getTP().getPoints());
     DataTable quo = getDataTableFromArrayListRefPoints(problem.getSQ().getPoints());
     DataTable anti = getDataTableFromArrayListRefPoints(problem.getAI().getPoints());
+    Alternative best_alt = problem.getBest();
+    DataTable best = null;
+    if (best_alt != null)
+    {
+      best = getDataTableFromArrayListRefPoints(best_alt.getPoint());
+    }
 
-    plot = new XYPlot(pareto_optimal, rest, bounds, target, quo, anti);
+    if  (best != null)
+    {
+      plot = new XYPlot(pareto_optimal, rest, bounds, target, quo, anti, best);
+    }
+    else
+    {
+      plot = new XYPlot(pareto_optimal, rest, bounds, target, quo, anti);
+    }
     DefaultPointRenderer2D point_renderer = new DefaultPointRenderer2D();
-    point_renderer.setSetting(PointRenderer.COLOR, Color.GREEN);
+    point_renderer.setSetting(PointRenderer.COLOR, new Color(0, 127, 0));
     plot.setPointRenderer(pareto_optimal, point_renderer);
     point_renderer = new DefaultPointRenderer2D();
     point_renderer.setSetting(PointRenderer.COLOR, Color.BLACK);
@@ -726,6 +772,12 @@ public class MainWindow extends javax.swing.JFrame {
     point_renderer = new DefaultPointRenderer2D();
     point_renderer.setSetting(PointRenderer.COLOR, Color.RED);
     plot.setPointRenderer(anti, point_renderer);
+    if (best != null)
+    {
+      point_renderer = new DefaultPointRenderer2D();
+      point_renderer.setSetting(PointRenderer.COLOR, Color.GREEN);
+      plot.setPointRenderer(best, point_renderer);
+    }
     jPanel2.add(new InteractivePanel(plot));
     jPanel2.repaint();
   }
@@ -758,6 +810,12 @@ public class MainWindow extends javax.swing.JFrame {
     for (RefPoint rp : array) {
       ret.add(rp.getCriterionValue(0), rp.getCriterionValue(1));
     }
+    return ret;
+  }
+  
+  private DataTable getDataTableFromArrayListRefPoints(RefPoint rp) {
+    DataTable ret = new DataTable(Double.class, Double.class);
+    ret.add(rp.getCriterionValue(0), rp.getCriterionValue(1));
     return ret;
   }
 

@@ -46,7 +46,7 @@ public class RefPoint {
     }
 
     public void addCriterionValue(int criterion, Double value) throws NegativeValueException, NullValueException {
-            if (criterion < 0) {
+            if (criterion < 0 || value < 0) {
                 throw new NegativeValueException();
             }
             else if (value == null) {
